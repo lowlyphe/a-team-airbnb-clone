@@ -1,26 +1,62 @@
 const express = require("express");
 const path = require('path')
 const cors = require("cors");
-const { Pool } = require("pg");
+const MongoClient = require('mongodb').MongoClient
+const mongoose = require('mongoose')
+const House = require('./Schema/House.js')
 const dotenv = require("dotenv");
 dotenv.config();
 const { DATABASE_URL, NODE_ENV, PORT } = process.env;
-const pool = new Pool({
-  connectionString: DATABASE_URL,
-  ...(NODE_ENV === "production" ? { ssl: { rejectUnauthorized: false } } : {}),
-});
+const fs = require('fs/promises')
+
 
 const app = express();
 
+async function seedDB() {
+  const uri = "mongodb://localhost/airbnb";
 
-//Connected Database
-pool.connect((err) => {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log("PostgresSQL Connected");
+  const client = new MongoClient(uri, {
+    useNewUrlParser: true
+  });
+
+  try {
+    await client.connect();
+    console.log('db connected')
+
+    const collection = client.db('airbnb').collection('houses');
+    //collection.drop();
+    let houseData = []
+
+    let data = await fs.readFile('houses.json', 'utf-8', () => data)
+    data = JSON.parse(data)
+    for (let i = 0; i < data.length; i++) {
+      const house = {
+        zipcode: data[i].zipcode,
+        city: data[i].city,
+        streetaddress: data[i].streetaddress,
+        country: data[i].country,
+        state: data[i].state,
+        home_type: data[i].home_type,
+        prop_type: data[i].prop_type,
+        latitude: data[i].latitude,
+        longitude: data[i].longitude
+        }
+      houseData.push(house)
+    }
+    collection.insertMany(houseData)
+
+  } catch (err) {
+    console.log('error:', err.stack)
   }
-});
+}
+seedDB();
+const test = () => {
+
+}
+
+
+
+
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'build')));
