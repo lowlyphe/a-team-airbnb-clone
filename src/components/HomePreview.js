@@ -4,15 +4,7 @@ import { NavContext } from "../components/navbar/NavContext";
 import heart from "../assets/heart.svg";
 import heartFull from "../assets/heart-full.png";
 
-export default function HomePreview({
-  city,
-  state,
-  picture,
-  country,
-  id,
-  updateWishlist,
-  wishlist,
-}) {
+export default function HomePreview({ city, state, picture, country, id, updateWishlist, wishlist }) {
   const [miles, setMiles] = useState((Math.random() * 100).toFixed(0));
   const [price, setPrice] = useState((Math.random() * 1000).toFixed(0));
   const [rating, setRating] = useState((Math.random() * 5).toFixed(2));

@@ -3,19 +3,19 @@ const path = require('path')
 const cors = require("cors");
 const MongoClient = require('mongodb').MongoClient
 const mongoose = require('mongoose')
-const House = require('./Schema/House.js')
+const House = require('./Schema/House')
 const dotenv = require("dotenv");
 dotenv.config();
-const { DATABASE_URL, NODE_ENV, PORT } = process.env;
+const { DATABASE_URL, PORT } = process.env;
 const fs = require('fs/promises')
 
 
 const app = express();
+mongoose.connect(DATABASE_URL)
 
 async function seedDB() {
-  const uri = "mongodb://localhost/airbnb";
 
-  const client = new MongoClient(uri, {
+  const client = new MongoClient(DATABASE_URL, {
     useNewUrlParser: true
   });
 
@@ -49,13 +49,7 @@ async function seedDB() {
     console.log('error:', err.stack)
   }
 }
-seedDB();
-const test = () => {
-
-}
-
-
-
+//seedDB();
 
 app.use(cors());
 app.use(express.json());
@@ -63,162 +57,42 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 
 // GET HOMES
-app.get("/homes", (req, res) => {
-  pool.query("SELECT * FROM homes").then((result) => {
-    res.send(result.rows);
-  });
+app.get("/api/homes", async (req, res) => {
+  const data = await House.find()
+  res.status(200).header('application/json').send(data)
 });
+
 // GET homes by ID
-app.get("/homes/:id", (req, res, next) => {
+app.get("/api/homes/:id", async (req, res) => {
   const id = req.params.id;
-  pool
-    .query("SELECT * FROM homes WHERE id = $1", [id])
-    .then((data) => {
-      const home = data.rows;
-      if ([0]) {
-        res.send(home);
-      }
-    })
-    .catch(next);
+  console.log(id)
+  const data = await House.findById(id)
+  res.status(200).header('application/json').send(data)  
 });
+
+
 // GET HOMES by Country
-app.get("/homes/country/:country", (req, res, next) => {
+app.get("/api/homes/country/:country", async (req, res) => {
   const country = req.params.country;
-  pool
-    .query("SELECT * FROM homes WHERE country = $1", [country])
-    .then((data) => {
-      const home = data.rows;
-      if ([0]) {
-        res.send(home);
-      }
-    })
-    .catch(next);
+  const data = await House.find({ country: country })
+  res.status(200).header('application/json').send(data) 
 });
 
 // GET HOMES by Property Type
-app.get("/homes/type/:prop_type", (req, res, next) => {
+app.get("/api/homes/type/:prop_type", async (req, res) => {
   const prop_type = req.params.prop_type;
-  pool
-    .query("SELECT * FROM homes WHERE prop_type = $1", [prop_type])
-    .then((data) => {
-      const home = data.rows;
-      if ([0]) {
-        res.send(home);
-      }
-    })
-    .catch(next);
+  const data = await House.find({ prop_type: prop_type })
+  res.status(200).header('application/json').send(data) 
 });
 
-// DELETE HOME
-app.delete("/homes/:id", async (req, res) => {
-  const { id } = req.params;
-  await pool.query("DELETE FROM homes WHERE id = $1", [id]);
-  res.sendStatus(200);
-});
-// PATCH HOME
-app.patch("/homes/:id", async (req, res) => {
-  const { id } = req.params;
-  const {
-    zipcode,
-    city,
-    streetname,
-    streetaddress,
-    country,
-    state,
-    home_type,
-    prop_type,
-    latitude,
-    longitude,
-  } = req.body;
-  const result = await pool
-    .query(
-      `
-        UPDATE homes
-        SET zipcode = COALESCE($1, zipcode),
-        city = COALESCE($2, city),
-        streetname = COALESCE($3, streetname),
-        streetaddress = COALESCE($4, streetaddress),
-        country = COALESCE($5, country),
-        state = COALESCE($6, state),
-        home_type = COALESCE($7, home_type),
-        prop_type = COALESCE($8, prop_type),
-        latitude = COALESCE($9, latitude),
-        longitude = COALESCE($10, longitude),
-        WHERE id = $11
-        RETURNING *;
-        `,
-      [
-        zipcode,
-        city,
-        streetname,
-        streetaddress,
-        country,
-        state,
-        home_type,
-        prop_type,
-        latitude,
-        longitude,
-        id,
-      ]
-    )
-    .then((data) => {
-      res.send(data.rows[0]);
-    });
-});
-// POST HOME
-app.post("/homes/", (req, res) => {
-  const {
-    zipcode,
-    city,
-    streetname,
-    streetaddress,
-    country,
-    state,
-    home_type,
-    prop_type,
-    latitude,
-    longitude,
-  } = req.body;
-  pool
-    .query(
-      `
-      INSERT INTO homes
-      (
-        zipcode,
-        city,
-        streetname,
-        streetaddress,
-        country,
-        state,
-        home_type,
-        prop_type,
-        latitude,
-        longitude
-        )
-        VALUES
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-        RETURNING *;
-        `,
-      [
-        zipcode,
-        city,
-        streetname,
-        streetaddress,
-        country,
-        state,
-        home_type,
-        prop_type,
-        latitude,
-        longitude,
-      ]
-    )
-    .then((data) => {
-      res.send(data.rows[0]);
-    })
-    .catch((err) => {
-      res.sendStatus(500);
-    });
-});
+//GET Wishlist
+app.post('/api/wishlist', async (req,res) => {
+  const wishlist = req.body.idList
+  const data = await House.find({_id: wishlist})
+  res.status(200).header('application/json').send(data) 
+})
+
+
 
 
 app.listen(PORT, () => {

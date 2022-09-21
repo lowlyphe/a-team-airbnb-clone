@@ -7,12 +7,14 @@ const API_URL = process.env.REACT_APP_API_URL;
 export default function Wishlist({ wishlist, updateWishlist }) {
   const [p, setp] = useState([]);
   useEffect(() => {
-    for (let i = 0; i < wishlist.length; i++) {
-      axios.get(`${API_URL}/homes/${wishlist[i]}`).then((res) => {
-        // console.log(res.data);
-        setp((prevp) => [...prevp, res.data[0]]);
+    axios.post(`${API_URL}/api/wishlist`, {
+      idList: wishlist
+    }).then((res) => {
+        for (let i of res.data) {
+          setp((prevp) => [...prevp, res.data]);
+        }
+        
       });
-    }
   }, []);
 
   const removeFromWishList = (id) => {

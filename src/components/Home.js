@@ -14,7 +14,7 @@ export default function Home({ updateWishlist, wishlist }) {
   const [currentHomes, setCurrentHomes] = useState([]);
 
   useEffect(() => {
-    axios.get(`${API_URL}/homes`).then((res) => {
+    axios.get(`${API_URL}/api/homes`).then((res) => {
       for (let i = 0; i < res.data.length; i++) {
         setCurrentHomes((prevCurrentHomes) => [
           ...prevCurrentHomes,
@@ -38,7 +38,7 @@ export default function Home({ updateWishlist, wishlist }) {
           <div
             key={v4()}
             onClick={() => {
-              window.open(`/housedetail/${currentHomes.id}`);
+              window.open(`/housedetail/${currentHomes._id}`);
             }}
           >
             <HomePreview
@@ -46,7 +46,7 @@ export default function Home({ updateWishlist, wishlist }) {
               state={currentHomes.state}
               picture={currentHomes.url}
               country={currentHomes.country}
-              id={currentHomes.id}
+              id={currentHomes._id}
               updateWishlist={updateWishlist}
               wishlist={wishlist}
             />

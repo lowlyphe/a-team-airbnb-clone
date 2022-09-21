@@ -27,14 +27,13 @@ function HouseDetail() {
   const [house, setHouse] = useState(null);
 
   useEffect(() => {
-    axios.get(`${API_URL}/homes/${id}`).then((response) => {
-      // console.log("House ID:", response.data[0]);
+    axios.get(`${API_URL}/api/homes/${id}`).then((response) => {
       setHouseObject(response.data);
     });
-  }, [id]);
+  }, []);
 
   useEffect(() => {
-    axios.get(`${API_URL}/homes`).then((response) => {
+    axios.get(`${API_URL}/api/homes`).then((response) => {
       // console.log("House data:", response.data);
       setHouse(response.data);
       if (house) {

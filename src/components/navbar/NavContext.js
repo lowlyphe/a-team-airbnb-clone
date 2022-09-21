@@ -28,7 +28,7 @@ export default function NavContextProvider({ children }) {
   const [searchResults, setSearchResults] = useState([]);
   const getHomesByCountry = async (input) => {
     try {
-      const response = await axios.get(`${API_URL}/homes/country/${input}`);
+      const response = await axios.get(`${API_URL}/api/homes/country/${input}`);
       setSearchResults(response.data);
     } catch (error) {
       console.log(error);
@@ -46,7 +46,7 @@ export default function NavContextProvider({ children }) {
   const [filterList, setFilterList] = useState([]);
   const getFilterHome = async (input) => {
     try {
-      const response = await axios.get(`${API_URL}/homes/type/${input}`);
+      const response = await axios.get(`${API_URL}/api/homes/type/${input}`);
       setFilterList(response.data);
     } catch (error) {
       console.log(error);
