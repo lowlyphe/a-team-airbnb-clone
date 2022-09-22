@@ -1,4 +1,6 @@
 const express = require("express");
+const { graphqlHTTP } = require('express-graphql')
+const { GraphQLSchema, GraphQLObjectType, GraphQLList, GraphQLInt, GraphQLNonNull, GraphQLString } = require('graphql')
 const path = require('path')
 const cors = require("cors");
 const MongoClient = require('mongodb').MongoClient
@@ -24,7 +26,7 @@ async function seedDB() {
     console.log('db connected')
 
     const collection = client.db('airbnb').collection('houses');
-    //collection.drop();
+    collection.drop();
     let houseData = []
 
     let data = await fs.readFile('houses.json', 'utf-8', () => data)
@@ -54,6 +56,52 @@ async function seedDB() {
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'build')));
+
+const HouseType = new GraphQLObjectType({
+  name: 'House',
+  description: 'Represents an available house',
+  fields: () => ({
+    _id: { type: GraphQLNonNull(GraphQLString) },
+    zipcode: { type: GraphQLInt },
+    city: { type: GraphQLString },
+    streetAddress: { type: GraphQLString },
+    country: { type: GraphQLString },
+    home_type: { type: GraphQLString },
+    prop_type: { type: GraphQLString },
+    latitude: { type: GraphQLInt },
+    longitude: { type: GraphQLInt },
+  })
+})
+
+const RootQueryType = new GraphQLObjectType({
+  name: 'Query',
+  description: 'Root Query',
+  fields: () => ({
+    homes: {
+      type: new GraphQLList(HouseType),
+      description: 'List of houses',
+      resolve: async () => await House.find()
+    },
+    house: {
+      type: HouseType,
+      description: 'Single house',
+      args: {
+        id: { type: GraphQLString }
+      },
+      resolve: async (args) => await House.findById({ id: args })
+    }
+
+  })
+})
+
+const schema = new GraphQLSchema({
+  query: RootQueryType
+})
+
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  grapgiql: true
+}))
 
 
 // GET HOMES
