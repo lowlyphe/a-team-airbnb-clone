@@ -14,13 +14,27 @@ export default function Home({ updateWishlist, wishlist }) {
   const [currentHomes, setCurrentHomes] = useState([]);
 
   useEffect(() => {
-    axios.get(`${API_URL}/api/homes`).then((res) => {
-      for (let i = 0; i < res.data.length; i++) {
-        setCurrentHomes((prevCurrentHomes) => [
-          ...prevCurrentHomes,
-          res.data[i],
-        ]);
+    axios({
+      url: `http://localhost:3010/graphql`,
+      method: 'post',
+      data: {
+        query:` {
+                  homes {
+                    city
+                    state
+                    country
+                    _id
+                  }
+                }`
       }
+    }).then((res) => {
+      console.log(res)
+      // for (let i = 0; i < res.data.length; i++) {
+      //   setCurrentHomes((prevCurrentHomes) => [
+      //     ...prevCurrentHomes,
+      //     res.data[i],
+      //   ]);
+     // }
     });
   }, []);
 

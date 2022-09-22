@@ -66,6 +66,7 @@ const HouseType = new GraphQLObjectType({
     city: { type: GraphQLString },
     streetAddress: { type: GraphQLString },
     country: { type: GraphQLString },
+    state: { type: GraphQLString },
     home_type: { type: GraphQLString },
     prop_type: { type: GraphQLString },
     latitude: { type: GraphQLInt },
@@ -80,7 +81,27 @@ const RootQueryType = new GraphQLObjectType({
     homes: {
       type: new GraphQLList(HouseType),
       description: 'List of houses',
-      resolve: async () => await House.find()
+      args: {
+        id: { type: GraphQLList(GraphQLString) },
+        country: { type: GraphQLString },
+        prop_type: { type: GraphQLString }
+      },
+      resolve: async (parent, args) => {
+        const data = await House.find()
+        console.log(data[0])
+        if (Object.keys(args).length === 0) return data
+        if ('country' in args)  return data.filter(data => args.country === data.country)
+        else if ('prop_type' in args) return data.filter(data => args.prop_type === data.prop_type)
+        else if ('id' in args) {
+          let output = []
+          for (let i = 0; i < args.id.length; i++) {
+            for (let j = 0; j < data.length; j++) {
+              if (args.id[i] == data[j]._id) output.push(data[j])
+            }
+          }          
+          return output
+        } 
+      }
     },
     house: {
       type: HouseType,
@@ -88,8 +109,9 @@ const RootQueryType = new GraphQLObjectType({
       args: {
         id: { type: GraphQLString }
       },
-      resolve: async (args) => await House.findById({ id: args })
-    }
+      resolve: async (parent, args) => await House.findById(args.id)
+    },
+    
 
   })
 })
