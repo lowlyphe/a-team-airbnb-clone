@@ -127,44 +127,6 @@ app.use('/graphql', graphqlHTTP({
 }))
 
 
-// GET HOMES
-// app.get("/api/homes", async (req, res) => {
-//   const data = await House.find()
-//   res.status(200).header('application/json').send(data)
-// });
-
-// GET homes by ID
-// app.get("/api/homes/:id", async (req, res) => {
-//   const id = req.params.id;
-//   console.log(id)
-//   const data = await House.findById(id)
-//   res.status(200).header('application/json').send(data)  
-// });
-
-
-// // GET HOMES by Country
-// app.get("/api/homes/country/:country", async (req, res) => {
-//   const country = req.params.country;
-//   const data = await House.find({ country: country })
-//   res.status(200).header('application/json').send(data) 
-// });
-
-// // GET HOMES by Property Type
-// app.get("/api/homes/type/:prop_type", async (req, res) => {
-//   const prop_type = req.params.prop_type;
-//   const data = await House.find({ prop_type: prop_type })
-//   res.status(200).header('application/json').send(data) 
-// });
-
-// //GET Wishlist
-// app.post('/api/wishlist', async (req,res) => {
-//   const wishlist = req.body.idList
-//   const data = await House.find({_id: wishlist})
-//   res.status(200).header('application/json').send(data) 
-// })
-
-
-
 
 app.listen(PORT, () => {
   console.log(`Listening on ${PORT}`);
