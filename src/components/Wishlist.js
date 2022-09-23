@@ -7,11 +7,23 @@ const API_URL = process.env.REACT_APP_API_URL;
 export default function Wishlist({ wishlist, updateWishlist }) {
   const [p, setp] = useState([]);
   useEffect(() => {
-    axios.post(`${API_URL}/api/wishlist`, {
-      idList: wishlist
+    let newWishlist = wishlist.map(wishlist => `"${wishlist}"`)
+    axios({
+      url: `http://localhost:3010/graphql`,
+      method: 'post',
+      data: {
+        query:` {
+                  homes (id: [${newWishlist}]) {
+                    city
+                    state
+                    country
+                    _id
+                  }
+                }`
+      }
     }).then((res) => {
-        for (let i of res.data) {
-          setp((prevp) => [...prevp, res.data]);
+        for (let i of res.data.data.homes) {
+          setp((prevp) => [...prevp, res.data.data.homes]);
         }
         
       });

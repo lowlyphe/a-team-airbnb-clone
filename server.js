@@ -9,7 +9,8 @@ const House = require('./Schema/House')
 const dotenv = require("dotenv");
 dotenv.config();
 const { DATABASE_URL, PORT } = process.env;
-const fs = require('fs/promises')
+const fs = require('fs/promises');
+const { request } = require("http");
 
 
 const app = express();
@@ -87,12 +88,12 @@ const RootQueryType = new GraphQLObjectType({
         prop_type: { type: GraphQLString }
       },
       resolve: async (parent, args) => {
-        const data = await House.find()
-        console.log(data[0])
+        const data = await House.find().limit(50)
         if (Object.keys(args).length === 0) return data
         if ('country' in args)  return data.filter(data => args.country === data.country)
         else if ('prop_type' in args) return data.filter(data => args.prop_type === data.prop_type)
         else if ('id' in args) {
+          console.log(args.id[0])
           let output = []
           for (let i = 0; i < args.id.length; i++) {
             for (let j = 0; j < data.length; j++) {
@@ -122,45 +123,45 @@ const schema = new GraphQLSchema({
 
 app.use('/graphql', graphqlHTTP({
   schema: schema,
-  grapgiql: true
+  graphiql: true
 }))
 
 
 // GET HOMES
-app.get("/api/homes", async (req, res) => {
-  const data = await House.find()
-  res.status(200).header('application/json').send(data)
-});
+// app.get("/api/homes", async (req, res) => {
+//   const data = await House.find()
+//   res.status(200).header('application/json').send(data)
+// });
 
 // GET homes by ID
-app.get("/api/homes/:id", async (req, res) => {
-  const id = req.params.id;
-  console.log(id)
-  const data = await House.findById(id)
-  res.status(200).header('application/json').send(data)  
-});
+// app.get("/api/homes/:id", async (req, res) => {
+//   const id = req.params.id;
+//   console.log(id)
+//   const data = await House.findById(id)
+//   res.status(200).header('application/json').send(data)  
+// });
 
 
-// GET HOMES by Country
-app.get("/api/homes/country/:country", async (req, res) => {
-  const country = req.params.country;
-  const data = await House.find({ country: country })
-  res.status(200).header('application/json').send(data) 
-});
+// // GET HOMES by Country
+// app.get("/api/homes/country/:country", async (req, res) => {
+//   const country = req.params.country;
+//   const data = await House.find({ country: country })
+//   res.status(200).header('application/json').send(data) 
+// });
 
-// GET HOMES by Property Type
-app.get("/api/homes/type/:prop_type", async (req, res) => {
-  const prop_type = req.params.prop_type;
-  const data = await House.find({ prop_type: prop_type })
-  res.status(200).header('application/json').send(data) 
-});
+// // GET HOMES by Property Type
+// app.get("/api/homes/type/:prop_type", async (req, res) => {
+//   const prop_type = req.params.prop_type;
+//   const data = await House.find({ prop_type: prop_type })
+//   res.status(200).header('application/json').send(data) 
+// });
 
-//GET Wishlist
-app.post('/api/wishlist', async (req,res) => {
-  const wishlist = req.body.idList
-  const data = await House.find({_id: wishlist})
-  res.status(200).header('application/json').send(data) 
-})
+// //GET Wishlist
+// app.post('/api/wishlist', async (req,res) => {
+//   const wishlist = req.body.idList
+//   const data = await House.find({_id: wishlist})
+//   res.status(200).header('application/json').send(data) 
+// })
 
 
 

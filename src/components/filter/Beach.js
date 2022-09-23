@@ -5,7 +5,6 @@ import HomePreview from "../HomePreview";
 
 export default function Beach({updateWishlist, wishlist }) {
   const { urlArr, filterList } = useContext(NavContext);
-  //   console.log(filterList);
 
   const resultWithUrl = filterList.map((item, index) => {
     return {

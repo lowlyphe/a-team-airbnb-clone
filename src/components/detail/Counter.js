@@ -79,12 +79,9 @@ export const Counter = () => {
       }}
     >
       <div
-        // value={`${numOfGuest} guest`}
-        // className="input"
         onClick={() => {
           setOpen((open) => !open);
         }}
-        // onChange={() => console.log(numOfGuest)}
         style={{
           textAlign: "center",
           border: "1px solid",

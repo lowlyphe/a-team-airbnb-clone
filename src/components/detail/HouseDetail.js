@@ -27,15 +27,40 @@ function HouseDetail() {
   const [house, setHouse] = useState(null);
 
   useEffect(() => {
-    axios.get(`${API_URL}/api/homes/${id}`).then((response) => {
-      setHouseObject(response.data);
+    axios({
+      url: `http://localhost:3010/graphql`,
+      method: 'post',
+      data: {
+        query:` {
+                  house (id: "${id}") {
+                    city
+                    state
+                    country
+                    _id
+                  }
+                }`
+      }
+    }).then((response) => {
+      setHouseObject(response.data.data.house);
     });
   }, []);
 
   useEffect(() => {
-    axios.get(`${API_URL}/api/homes`).then((response) => {
-      // console.log("House data:", response.data);
-      setHouse(response.data);
+    axios({
+      url: `http://localhost:3010/graphql`,
+      method: 'post',
+      data: {
+        query:` {
+                  homes {
+                    city
+                    state
+                    country
+                    _id
+                  }
+                }`
+      }
+    }).then((response) => {
+      setHouse(response.data.data.homes);
       if (house) {
         setHouseObject(() => house);
       }

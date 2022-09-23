@@ -27,9 +27,7 @@ function App() {
   const [wishlist, setWishlist] = useStickyState([], "wishlist");
 
   const updateWishlist = (id) => {
-    // console.log('updated')
     if (wishlist.includes(id)) {
-      // console.log('boolean')
       setWishlist(wishlist.filter((wish) => wish !== id));
     } else {
       setWishlist((prevWishlist) => [...prevWishlist, id]);

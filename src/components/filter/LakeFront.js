@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {  useContext } from "react";
 import { NavContext } from "../navbar/NavContext";
 
@@ -19,9 +19,9 @@ export default function LakeFront({ updateWishlist, wishlist }) {
       {resultWithUrl.map((currentHomes, i) => {
         return (
           <div
-            key={currentHomes.id}
+            key={currentHomes._id}
             onClick={() => {
-              window.open(`/housedetail/${currentHomes.id}`);
+              window.open(`/housedetail/${currentHomes._id}`);
             }}
           >
             <HomePreview
@@ -29,7 +29,7 @@ export default function LakeFront({ updateWishlist, wishlist }) {
               state={currentHomes.state}
               picture={currentHomes.url}
               country={currentHomes.country}
-              id={currentHomes.id}
+              id={currentHomes._id}
               updateWishlist={updateWishlist}
               wishlist={wishlist}
             />

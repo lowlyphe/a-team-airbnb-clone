@@ -20,15 +20,26 @@ export default function NavContextProvider({ children }) {
       setLoremPic(res.data);
     });
   }, []);
-  // console.log(loremPic);
   const urlArr = loremPic.map((item) => item.download_url);
-  // console.log(urlArr);
 
   //**Get homes by country (search results) */
   const [searchResults, setSearchResults] = useState([]);
   const getHomesByCountry = async (input) => {
     try {
-      const response = await axios.get(`${API_URL}/api/homes/country/${input}`);
+      const response = await axios({
+      url: `http://localhost:3010/graphql`,
+      method: 'post',
+      data: {
+        query:` {
+                  homes (country: "${input}") {
+                    city
+                    state
+                    country
+                    _id
+                  }
+                }`
+      }
+    })
       setSearchResults(response.data);
     } catch (error) {
       console.log(error);
@@ -46,14 +57,26 @@ export default function NavContextProvider({ children }) {
   const [filterList, setFilterList] = useState([]);
   const getFilterHome = async (input) => {
     try {
-      const response = await axios.get(`${API_URL}/api/homes/type/${input}`);
-      setFilterList(response.data);
+      const response = await axios({
+        url: `http://localhost:3010/graphql`,
+        method: 'post',
+        data: {
+          query:` {
+                    homes (prop_type: "${input}") {
+                      city
+                      state
+                      country
+                      _id
+                    }
+                  }`
+        }
+      })
+      setFilterList(response.data.data.homes);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // console.log(currentHomesData);
 
   const navContextData = {
     searchInput,

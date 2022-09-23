@@ -28,13 +28,12 @@ export default function Home({ updateWishlist, wishlist }) {
                 }`
       }
     }).then((res) => {
-      console.log(res)
-      // for (let i = 0; i < res.data.length; i++) {
-      //   setCurrentHomes((prevCurrentHomes) => [
-      //     ...prevCurrentHomes,
-      //     res.data[i],
-      //   ]);
-     // }
+      for (let i = 0; i < res.data.data.homes.length; i++) {        
+        setCurrentHomes((prevCurrentHomes) => [
+          ...prevCurrentHomes,
+          res.data.data.homes[i],
+        ]);
+     }
     });
   }, []);
 
@@ -42,7 +41,6 @@ export default function Home({ updateWishlist, wishlist }) {
     return { ...currentHomes[index], url: item };
   });
 
-  // console.log(currentHomesWithUrl);
 
   //Hung: pass id props to HomePreview
   return (

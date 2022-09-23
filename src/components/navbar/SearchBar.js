@@ -8,10 +8,7 @@ import "./Navbar.css";
 export default function SearchBar() {
   const { searchInput, onChangeInput, getHomesByCountry } =
     useContext(NavContext);
-  // console.log(searchInput);
-  // console.log(searchInput);
   const [showDropDown, setShowDropDown] = useState(false);
-  // console.log(showDropDown);
   const navigate = useNavigate();
   const navigateClick = () => {
     getHomesByCountry(searchInput);
@@ -41,10 +38,10 @@ export default function SearchBar() {
         <div className="lg:block flex-shrink flex-grow-0 justify-start px-2">
           <div className="inline-block">
             <div className="inline-flex items-center max-w-full">
-              <button
+              <div
                 className="search-btn hover:shadow-lg flex items-center pl-2 border rounded-full px-1  py-1"
-                type="button"
-                onClick={navigateClick}
+        
+                
               >
                 <div className="search-desc block flex-grow flex-shrink ">
                   Anywhere
@@ -63,7 +60,7 @@ export default function SearchBar() {
                   />
                 </div>
 
-                <div className="search-icon flex items-center justify-center relative  h-8 w-8 rounded-full">
+                <button className="search-icon flex items-center justify-center relative  h-8 w-8 rounded-full" onClick={navigateClick}>
                   <svg
                     viewBox="0 0 32 32"
                     xmlns="http://www.w3.org/2000/svg"
@@ -84,8 +81,9 @@ export default function SearchBar() {
                       <path d="m13 24c6.0751322 0 11-4.9248678 11-11 0-6.07513225-4.9248678-11-11-11-6.07513225 0-11 4.92486775-11 11 0 6.0751322 4.92486775 11 11 11zm8-3 9 9" />
                     </g>
                   </svg>
-                </div>
-              </button>
+                  
+                </button>
+              </div>
             </div>
           </div>
         </div>

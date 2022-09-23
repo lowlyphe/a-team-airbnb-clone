@@ -11,7 +11,6 @@ export default function HomePreview({ city, state, picture, country, id, updateW
   const [bookmarked, setBookmarked] = useState(false);
 
   function handleBookmark(e) {
-    // console.log('clicked')
     e.stopPropagation();
     updateWishlist(id);
     setBookmarked((prevMode) => !prevMode);
