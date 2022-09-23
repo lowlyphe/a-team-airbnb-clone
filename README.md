@@ -47,8 +47,10 @@ Users should be able to:
 
 - [React](https://reactjs.org/) - JS library
 - [Tailwind](https://tailwindcss.com/) - JS library
+- [GraphQL](https://graphql.org/) - Querying
 - [Express](https://expressjs.com/) - Node library
-- [PostgreSQL](https://www.postgresql.org/) - Database
+- [MongoDB](https://www.mongodb.com/) - Database
+- [Mongoose](https://mongoosejs.com/) - Database Library
 
 ### What we learned
 
