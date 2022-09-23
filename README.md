@@ -9,7 +9,7 @@
 - [Our process](#our-process)
   - [Built with](#built-with)
   - [What We learned](#what-we-learned)
-- [Optomization](#optomization)
+- [Optimization](#optimization)
 
 Do it yourself -
 
@@ -63,7 +63,7 @@ more simple to use. It was trivial to figure out how to get the server and datab
 in order to be compatible with Render. Successful deployment was a huge win, because the path to
 getting there was a challenge. We are proud of this project because we made it with all our efforts.
 
-### Optomization
+### Optimization
 
 Itinially the application had poor performance due to lengthy load times for database information and network calls for pictures. I changed the database from Postgres to MongoDB and refactored the app to use graphQL instead of REST APIs. I utilized a library to make image loading more efficient, mainly by only loading images when they are scrolled to on screen. App performance was improved by 80% and time to interactive was decreased by 30%
 
