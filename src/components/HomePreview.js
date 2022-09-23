@@ -3,6 +3,8 @@ import { useContext } from "react";
 import { NavContext } from "../components/navbar/NavContext";
 import heart from "../assets/heart.svg";
 import heartFull from "../assets/heart-full.png";
+import Img from 'react-cool-img'
+import loading from '../assets/loading.png'
 
 export default function HomePreview({ city, state, picture, country, id, updateWishlist, wishlist }) {
   const [miles, setMiles] = useState((Math.random() * 100).toFixed(0));
@@ -22,7 +24,7 @@ export default function HomePreview({ city, state, picture, country, id, updateW
 
   return (
     <div className="relative mx-1 my-4 flex flex-col items-start w-72">
-      <img className="w-70 rounded-lg home-img" src={picture} alt="img" />
+      <Img className="w-70 rounded-lg home-img" placeholder={loading} src={`https://picsum.photos/id/${miles}/200/300`} alt="img" />
       <div className="flex justify-between items-center w-full mt-2">
         <p className="font-semibold text-sm truncate">
           {city}, {state}, {country},

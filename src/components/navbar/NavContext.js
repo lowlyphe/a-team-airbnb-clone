@@ -13,15 +13,6 @@ export default function NavContextProvider({ children }) {
     setSearchInput(event.target.value);
   };
 
-  //**Get lorem picture */
-  const [loremPic, setLoremPic] = useState([]);
-  useEffect(() => {
-    axios.get("https://picsum.photos/v2/list?page=3&limit=100").then((res) => {
-      setLoremPic(res.data);
-    });
-  }, []);
-  const urlArr = loremPic.map((item) => item.download_url);
-
   //**Get homes by country (search results) */
   const [searchResults, setSearchResults] = useState([]);
   const getHomesByCountry = async (input) => {
@@ -83,7 +74,6 @@ export default function NavContextProvider({ children }) {
     onChangeInput,
     getHomesByCountry,
     searchResults,
-    urlArr,
     currentHomesData,
     setCurrentHomesData,
     handleClick,
